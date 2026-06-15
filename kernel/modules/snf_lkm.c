@@ -6,8 +6,19 @@
 #include <linux/ipv6.h>
 #include <linux/icmpv6.h>
 #include <net/netns/generic.h>
+##including the ip and tcp headers and netfilter
+#include <linux/netfilter_ipv4.h>
+#include <linux/ip.h>
+#include <linux/tcp.h>
+
 
 static unsigned int lkm_net_id;
+
+## adding the counters for capturing 
+static unsigned long syn_count = 0;
+static unsigned long ack_count = 0;
+static unsigned long fin_count = 0;
+static unsigned long rst_count = 0;
 
 struct lkm_netns_data {
 	struct nf_hook_ops nf_hops;
@@ -15,6 +26,8 @@ struct lkm_netns_data {
 
 static unsigned int nf_callback(void *priv, struct sk_buff *skb,
 				const struct nf_hook_state *state)
+
+##continuing tomorrow from here				
 {
 	struct ipv6hdr *ip6h;
 
