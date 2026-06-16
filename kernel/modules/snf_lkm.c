@@ -6,7 +6,7 @@
 #include <linux/ipv6.h>
 #include <linux/icmpv6.h>
 #include <net/netns/generic.h>
-##including the ip and tcp headers and netfilter
+//including the ip and tcp headers and netfilter
 #include <linux/netfilter_ipv4.h>
 #include <linux/ip.h>
 #include <linux/tcp.h>
@@ -14,7 +14,7 @@
 
 static unsigned int lkm_net_id;
 
-## adding the counters for capturing 
+// adding the counters for capturing 
 static unsigned long syn_count = 0;
 static unsigned long ack_count = 0;
 static unsigned long fin_count = 0;
@@ -27,9 +27,12 @@ struct lkm_netns_data {
 static unsigned int nf_callback(void *priv, struct sk_buff *skb,
 				const struct nf_hook_state *state)
 
-##continuing tomorrow from here				
+//continuing tomorrow from here				
 {
 	struct ipv6hdr *ip6h;
+	//adding the tcp header to the callback function
+	struct tcphdr *tcph;
+
 
 	if (!skb || !pskb_may_pull(skb, sizeof(*ip6h))) {
 		printk("weird skb?! Drop it!\n");
@@ -40,6 +43,25 @@ static unsigned int nf_callback(void *priv, struct sk_buff *skb,
 	if (ip6h->nexthdr == IPPROTO_ICMPV6) {
 		printk("recevied ICMPv6 packet! Drop it!\n");
 		return NF_DROP;
+	
+	//adding the check for TCP packets and counting the flags
+	if (ip6h->nexthdr == IPPROTO_TCP) {
+
+    tcph = (struct tcphdr *)
+           ((unsigned char *)ip6h + sizeof(struct ipv6hdr));
+
+    if (tcph->syn)
+        syn_count++;
+
+    if (tcph->ack)
+        ack_count++;
+
+    if (tcph->fin)
+        fin_count++;
+
+    if (tcph->rst)
+        rst_count++;
+}
 	}
 
 	return NF_ACCEPT;
@@ -114,7 +136,15 @@ static int __init lkm_init(void)
 static void __exit lkm_exit(void)
 {
 	unregister_pernet_subsys(&lkm_netns_ops);
+	// adding the kernal print to display the TCP flag statistics
+    printk("========== TCP FLAG STATISTICS ==========\n");
+    printk("SYN : %lu\n", syn_count);
+    printk("ACK : %lu\n", ack_count);
+    printk("FIN : %lu\n", fin_count);
+    printk("RST : %lu\n", rst_count);
+    printk("=========================================\n");
 
+    printk("lkm netfilter module unregistered\n");
 	printk("lkm netfilter module unregistered\n");
 }
 
