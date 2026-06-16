@@ -153,5 +153,5 @@ module_exit(lkm_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Andrea Mayer");
-MODULE_DESCRIPTION("Simple Linux kernel Netfilter Module for dropping ICMPv6 ingress packets");
+MODULE_DESCRIPTION("Simple Linux kernel Netfilter Module for TCP flag counting");
 MODULE_VERSION("1.0.0");
