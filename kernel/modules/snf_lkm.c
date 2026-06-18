@@ -152,6 +152,6 @@ module_init(lkm_init);
 module_exit(lkm_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Andrea Mayer");
+MODULE_AUTHOR("Sangesh");
 MODULE_DESCRIPTION("Simple Linux kernel Netfilter Module for TCP flag counting");
 MODULE_VERSION("1.0.0");
