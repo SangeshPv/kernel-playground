@@ -14,6 +14,19 @@ the goal of this project is to count how many tcp flags entered and leave the pa
  fin_count = 0;
  rst_count = 0;
 ## How it works
+Network Interface
+        ↓
+Netfilter Hook (PRE_ROUTING)
+        ↓
+Check IPv4 Packet
+        ↓
+Check TCP Header
+        ↓
+Read TCP Flags
+        ↓
+Update Counters
+        ↓
+Pass Packet Normally
 
 The module registers a hook with the Linux Netfilter framework. Netfilter allows kernel modules to inspect network packets as they pass through the Linux networking stack.
 When a packet reaches the selected Netfilter hook:
