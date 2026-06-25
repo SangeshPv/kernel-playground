@@ -22,7 +22,8 @@ RUN apt-get install -y \
 	binutils-dev \
 	libcap-dev \
 	libelf-dev \
-	gcc-multilib \
+	#gcc-multilib \
+	gcc-x86-64-linux-gnu \
 	gpg \
 	vim \
 	universal-ctags \
