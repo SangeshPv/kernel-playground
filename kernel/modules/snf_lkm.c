@@ -45,10 +45,11 @@ static unsigned int nf_callback(void *priv, struct sk_buff *skb,
 	}
 	//adding the check for TCP packets and counting the flags
 	if (ip6h->nexthdr == IPPROTO_TCP) {
-
+      if (!pskb_may_pull(skb, sizeof(*ip6h) + sizeof(*tcph)))
+        return NF_DROP;
     tcph = (struct tcphdr *)
            ((unsigned char *)ip6h + sizeof(struct ipv6hdr));
-
+	
     if (tcph->syn)
         syn_count++;
     if (tcph->ack)
