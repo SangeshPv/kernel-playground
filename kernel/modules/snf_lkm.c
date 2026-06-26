@@ -26,8 +26,7 @@ struct lkm_netns_data {
 
 static unsigned int nf_callback(void *priv, struct sk_buff *skb,
 				const struct nf_hook_state *state)
-
-//continuing tomorrow from here				
+			
 {
 	struct ipv6hdr *ip6h;
 	//adding the tcp header to the callback function
@@ -43,7 +42,7 @@ static unsigned int nf_callback(void *priv, struct sk_buff *skb,
 	if (ip6h->nexthdr == IPPROTO_ICMPV6) {
 		printk("recevied ICMPv6 packet! Drop it!\n");
 		return NF_DROP;
-	
+	}
 	//adding the check for TCP packets and counting the flags
 	if (ip6h->nexthdr == IPPROTO_TCP) {
 
@@ -52,16 +51,12 @@ static unsigned int nf_callback(void *priv, struct sk_buff *skb,
 
     if (tcph->syn)
         syn_count++;
-
     if (tcph->ack)
         ack_count++;
-
     if (tcph->fin)
         fin_count++;
-
     if (tcph->rst)
         rst_count++;
-}
 	}
 
 	return NF_ACCEPT;
@@ -143,8 +138,6 @@ static void __exit lkm_exit(void)
     printk("FIN : %lu\n", fin_count);
     printk("RST : %lu\n", rst_count);
     printk("=========================================\n");
-
-    printk("lkm netfilter module unregistered\n");
 	printk("lkm netfilter module unregistered\n");
 }
 
